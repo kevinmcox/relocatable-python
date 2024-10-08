@@ -55,14 +55,16 @@ def relativize_interpreter_path(framework_path, script_dir, shebang_line):
         original_path = original_path.replace(
             default_framework_path, current_framework_path, 1)
     return os.path.relpath(
-        original_path, os.path.abspath(script_dir).encode("UTF-8"))
+        os.path.realpath(original_path),
+        os.path.realpath(script_dir).encode("UTF-8")
+    )
 
 
 def is_framework_shebang(framework_path, text):
     """Returns a boolean to indicate if the text starts with a shebang
     referencing the framework_path or the default
     /Library/Frameworks/Python.framework path"""
-    this_framework_shebang = b"#!" + os.path.abspath(framework_path).encode("UTF-8")
+    this_framework_shebang = b"#!" + os.path.realpath(framework_path).encode("UTF-8")
     prefixes = [
         this_framework_shebang,
         b"#!/Library/Frameworks/Python.framework",
